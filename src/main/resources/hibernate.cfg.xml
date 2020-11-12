@@ -6,12 +6,13 @@
 
         <property name="hibernate.connection.driver_class">com.mysql.cj.jdbc.Driver</property>
         <property name="hibernate.dialect">org.hibernate.dialect.MySQL8Dialect</property>
-        <property name = "hibernate.connection.url">jdbc:mysql://localhost:3306/ifinances?serverTimezone=UTC</property>
-        <property name = "hibernate.connection.username">infinite</property>
-        <property name = "hibernate.connection.password">skills</property>
+        <property name ="hibernate.connection.url">jdbc:mysql://localhost:3306/ifinances?serverTimezone=CET</property>
+        <property name ="hibernate.connection.username">infinite</property>
+        <property name ="hibernate.connection.password">skills</property>
 
         <property name="show_sql">true</property>
 
         <mapping class="pl.paweln.infiniteskills.simple.data.entities.User" />
+        <mapping class="pl.paweln.infiniteskills.simple.data.entities.TimeTest" />
     </session-factory>
 </hibernate-configuration>

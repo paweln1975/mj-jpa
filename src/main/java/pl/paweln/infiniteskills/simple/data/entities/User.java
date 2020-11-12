@@ -5,9 +5,12 @@ import java.util.Date;
 
 @Entity
 @Table (name = "FINANCES_USER")
+@Access(value=AccessType.FIELD)
 public class User {
     @Id
-    @GeneratedValue (strategy = GenerationType.IDENTITY)
+    @GeneratedValue (strategy = GenerationType.TABLE, generator = "table_gen")
+    @TableGenerator(name="table_gen", table = "IFINANCES_KEYS",
+            pkColumnName = "PK_NAME", valueColumnName = "PK_VALUE", initialValue = 200)
     @Column(name = "USER_ID")
     private Long userId;
 
@@ -17,7 +20,7 @@ public class User {
     @Column(name = "LAST_NAME")
     private String lastName;
 
-    @Column(name = "BIRTH_DATE")
+    @Column(name = "BIRTH_DATE", nullable = false)
     private Date birthDate;
 
     @Column(name = "EMAIL_ADDRESS")
@@ -29,11 +32,25 @@ public class User {
     @Column(name = "LAST_UPDATED_BY")
     private String lastUpdatedBy;
 
-    @Column(name = "CREATED_DATE")
+    @Column(name = "CREATED_DATE", updatable = false)
     private Date createdDate;
 
-    @Column(name = "CREATED_BY")
+    @Column(name = "CREATED_BY", updatable = false)
     private String createdBy;
+
+    @Transient
+    private boolean valid;
+
+    public boolean isValid() {
+        return valid;
+    }
+
+    public void setValid(boolean valid) {
+        this.valid = valid;
+    }
+
+
+
 
     public Long getUserId() {
         return userId;

@@ -1,12 +1,10 @@
 package pl.paweln.infiniteskills.simple.data;
 
-import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
-import org.hibernate.cfg.Configuration;
-import pl.paweln.infiniteskills.simple.data.entities.User;
+
 
 public class HibernateUtil {
 
