@@ -23,17 +23,17 @@ public class User {
     @Column(name = "EMAIL_ADDRESS")
     private String emailAddress;
 
-    @Column(name = "LAST_UPDATE")
-    private Date lastUpdate;
+    @Column(name = "LAST_UPDATED_DATE")
+    private Date lastUpdatedDate;
 
-    @Column(name = "LAST_UPDATE_BY")
-    private String lastUpdateBy;
+    @Column(name = "LAST_UPDATED_BY")
+    private String lastUpdatedBy;
 
-    @Column(name = "DATE")
-    private Date createDate;
+    @Column(name = "CREATED_DATE")
+    private Date createdDate;
 
-    @Column(name = "LAST_CREATED_BY")
-    private String lastCreateBy;
+    @Column(name = "CREATED_BY")
+    private String createdBy;
 
     public Long getUserId() {
         return userId;
@@ -75,36 +75,36 @@ public class User {
         this.emailAddress = emailAddress;
     }
 
-    public Date getLastUpdate() {
-        return lastUpdate;
+    public Date getLastUpdatedDate() {
+        return lastUpdatedDate;
     }
 
-    public void setLastUpdate(Date lastUpdate) {
-        this.lastUpdate = lastUpdate;
+    public void setLastUpdatedDate(Date lastUpdate) {
+        this.lastUpdatedDate = lastUpdate;
     }
 
-    public String getLastUpdateBy() {
-        return lastUpdateBy;
+    public String getLastUpdatedBy() {
+        return lastUpdatedBy;
     }
 
-    public void setLastUpdateBy(String lastUpdateBy) {
-        this.lastUpdateBy = lastUpdateBy;
+    public void setLastUpdatedBy(String lastUpdatedBy) {
+        this.lastUpdatedBy = lastUpdatedBy;
     }
 
-    public Date getCreateDate() {
-        return createDate;
+    public Date getCreatedDate() {
+        return createdDate;
     }
 
-    public void setCreateDate(Date createDate) {
-        this.createDate = createDate;
+    public void setCreateDate(Date createdDate) {
+        this.createdDate = createdDate;
     }
 
-    public String getLastCreateBy() {
-        return lastCreateBy;
+    public String getCreatedBy() {
+        return createdBy;
     }
 
-    public void setLastCreateBy(String lastCreateBy) {
-        this.lastCreateBy = lastCreateBy;
+    public void setCreatedBy(String lastCreatedBy) {
+        this.createdBy = lastCreatedBy;
     }
 
 

@@ -1,6 +1,8 @@
 package pl.paweln.infiniteskills.simple.data;
 
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
@@ -15,15 +17,19 @@ public class HibernateUtil {
         return sessionFactory;
     }
     private static SessionFactory buildSessionFactory() {
-        try {
-            Configuration configuration = new Configuration();
-            configuration.addAnnotatedClass(User.class);
-            return configuration.buildSessionFactory
-                    (new StandardServiceRegistryBuilder().build());
 
+        final StandardServiceRegistry registry = new StandardServiceRegistryBuilder()
+                .configure() // configures settings from hibernate.cfg.xml
+                .build();
+
+        try {
+            SessionFactory sessionFactory;
+            sessionFactory = new MetadataSources(registry).buildMetadata().buildSessionFactory();
+
+            return sessionFactory;
         } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException("An error occured during creation the session");
+            StandardServiceRegistryBuilder.destroy(registry);
+            throw new RuntimeException("An error occurred during creation the session");
         }
 
     }
