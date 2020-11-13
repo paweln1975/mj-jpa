@@ -1,7 +1,11 @@
-package pl.paweln.infiniteskills.simple.data.entities;
+package pl.paweln.jpa.entities;
+
+import org.hibernate.annotations.Formula;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table (name = "FINANCES_USER")
@@ -38,8 +42,33 @@ public class User {
     @Column(name = "CREATED_BY", updatable = false)
     private String createdBy;
 
-    @Transient
+    @Transient // to exclude a field from being part of the entity persistent state
     private boolean valid;
+
+    @Formula("lower(datediff(curdate(), birth_date)/365)") // used to specify an SQL fragment that is executed in order to populate a given entity attribute
+    private int age;
+
+    // Mapping a composite value type
+    @Embedded
+    @AttributeOverrides({@AttributeOverride(name="addressLine1", column=@Column(name="USER_ADDRESS_LINE_1")),
+             @AttributeOverride(name="addressLine2", column=@Column(name="USER_ADDRESS_LINE_2"))})
+    private Address address;
+
+    // Mapping a collection of composite values types
+    @ElementCollection
+    @CollectionTable(name="USER_ADDRESS", joinColumns=@JoinColumn(name="USER_ID"))
+    @AttributeOverrides({@AttributeOverride(name="addressLine1", column=@Column(name="USER_ADDRESS_LINE_1")),
+            @AttributeOverride(name="addressLine2", column=@Column(name="USER_ADDRESS_LINE_2"))})
+    private List<Address> addressList = new ArrayList<Address>();
+
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
 
     public boolean isValid() {
         return valid;
@@ -48,9 +77,6 @@ public class User {
     public void setValid(boolean valid) {
         this.valid = valid;
     }
-
-
-
 
     public Long getUserId() {
         return userId;
@@ -124,6 +150,19 @@ public class User {
         this.createdBy = lastCreatedBy;
     }
 
+    public Address getAddress() {
+        return address;
+    }
 
+    public void setAddress(Address address) {
+        this.address = address;
+    }
 
+    public List<Address> getAddressList() {
+        return addressList;
+    }
+
+    public void setAddressList(List<Address> addressList) {
+        this.addressList = addressList;
+    }
 }

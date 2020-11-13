@@ -12,7 +12,9 @@
 
         <property name="show_sql">true</property>
 
-        <mapping class="pl.paweln.infiniteskills.simple.data.entities.User" />
-        <mapping class="pl.paweln.infiniteskills.simple.data.entities.TimeTest" />
+        <mapping class="pl.paweln.jpa.entities.User" />
+        <mapping class="pl.paweln.jpa.entities.TimeTest" />
+        <mapping class="pl.paweln.jpa.entities.Bank" />
+
     </session-factory>
 </hibernate-configuration>

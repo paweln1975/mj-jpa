@@ -1,4 +1,4 @@
-package pl.paweln.infiniteskills.simple.data.entities;
+package pl.paweln.jpa.entities;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -12,7 +12,7 @@ public class TimeTest {
     @Column(name="TIME_TEST_ID")
     private Long id;
 
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.TIMESTAMP) //java.util or java.time properties need to explicitly mark the SQL type
     @Column(name="DATETIME_COLUMN")
     private Date dateTime;
 
