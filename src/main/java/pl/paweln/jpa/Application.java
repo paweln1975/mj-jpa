@@ -3,10 +3,7 @@ package pl.paweln.jpa;
 import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import pl.paweln.jpa.entities.Address;
-import pl.paweln.jpa.entities.Bank;
-import pl.paweln.jpa.entities.TimeTest;
-import pl.paweln.jpa.entities.User;
+import pl.paweln.jpa.entities.*;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -20,6 +17,7 @@ public class Application {
         operateOnUser();
         operateOnTime();
         operateOnBank();
+        operateOnCredential();
 
         logger.info("Application completed.");
     }
@@ -123,5 +121,32 @@ public class Application {
         Calendar calendar = Calendar.getInstance();
         calendar.set(1975, Calendar.MAY, 30);
         return calendar.getTime();
+    }
+
+    private static void operateOnCredential() {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        session.getTransaction().begin();
+
+        User user = new User();
+        user.setFirstName("Emilka");
+        user.setLastName("Niedziela");
+        user.setBirthDate(getMyBirthdate());
+
+        user.setEmailAddress("emilka.niedziela@gmail.com");
+
+        user.setLastUpdatedDate(new Date());
+        user.setLastUpdatedBy("pawel");
+        user.setCreateDate(new Date());
+        user.setCreatedBy("pawel");
+
+        Credential credential = new Credential();
+        credential.setUserName("emilka");
+        credential.setPassword("password");
+        credential.setUser(user);
+
+        session.save(credential);
+
+        session.getTransaction().commit();
+        session.close();
     }
 }
