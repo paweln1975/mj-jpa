@@ -16,6 +16,8 @@
         <mapping class="pl.paweln.jpa.entities.TimeTest" />
         <mapping class="pl.paweln.jpa.entities.Bank" />
         <mapping class="pl.paweln.jpa.entities.Credential" />
-
+        <mapping class="pl.paweln.jpa.entities.Account" />
+        <mapping class="pl.paweln.jpa.entities.Transaction" />
+        <mapping class="pl.paweln.jpa.entities.Budget" />
     </session-factory>
 </hibernate-configuration>

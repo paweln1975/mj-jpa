@@ -12,6 +12,8 @@ public class Credential {
     @Column(name="CREDENTIAL_ID")
     private Long credentialId;
 
+    //unidirectional one to one association between Entities
+    // this is owing Entity - it contains a join key
     @OneToOne(cascade=CascadeType.ALL) // persist User when Credential is created
     @JoinColumn(name="USER_ID")
     private User user;

@@ -3,9 +3,7 @@ package pl.paweln.jpa.entities;
 import org.hibernate.annotations.Formula;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Entity
 @Table (name = "FINANCES_USER")
@@ -48,6 +46,11 @@ public class User {
     @Formula("lower(datediff(curdate(), birth_date)/365)") // used to specify an SQL fragment that is executed in order to populate a given entity attribute
     private int age;
 
+    // Bidirectional one to one association, only mapping to existing field, do not use cascade or JoinColumn
+    // this non owning entity (it does not contain a join column)
+    @OneToOne(mappedBy="user")
+    private Credential credential;
+
     // Mapping a composite value type
     @Embedded
     @AttributeOverrides({@AttributeOverride(name="addressLine1", column=@Column(name="USER_ADDRESS_LINE_1")),
@@ -61,6 +64,10 @@ public class User {
             @AttributeOverride(name="addressLine2", column=@Column(name="USER_ADDRESS_LINE_2"))})
     private List<Address> addressList = new ArrayList<Address>();
 
+    @ManyToMany(cascade = CascadeType.ALL, mappedBy = "users")
+    //@JoinTable(name="USER_ACCOUNT", joinColumns = @JoinColumn(name = "USER_ID"),
+    //        inverseJoinColumns = @JoinColumn(name="ACCOUNT_ID"))
+    private Set<Account> accounts = new HashSet<Account>();
 
     public int getAge() {
         return age;
@@ -164,5 +171,25 @@ public class User {
 
     public void setAddressList(List<Address> addressList) {
         this.addressList = addressList;
+    }
+
+    public Credential getCredential() {
+        return credential;
+    }
+
+    public void setCredential(Credential credential) {
+        this.credential = credential;
+    }
+
+    public Set<Account> getAccounts() {
+        return accounts;
+    }
+
+    public void setAccounts(Set<Account> accounts) {
+        this.accounts = accounts;
+    }
+
+    public void setCreatedDate(Date createdDate) {
+        this.createdDate = createdDate;
     }
 }
