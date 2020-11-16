@@ -15,6 +15,10 @@ public class Application {
 
         logger.info("Starting...");
 
+        deleteBank();
+        readAndUpdateBank();
+
+
         operateOnUser();
         operateOnTime();
         operateOnBank();
@@ -46,8 +50,6 @@ public class Application {
         Session session = HibernateUtil.getSessionFactory().openSession();
         session.getTransaction().begin();
 
-
-
         Address address = new Address();
         address.setAddressLine1("Bagrowa");
         address.setAddressLine2("82/32");
@@ -69,7 +71,11 @@ public class Application {
         user.getAddressList().add(address);
         user.getAddressList().add(address1);
 
+        logger.info("Before save: session contains object:" + session.contains(user));
+
         session.save(user);
+
+        logger.info("After save: session contains object:" + session.contains(user));
 
         session.getTransaction().commit();
 
@@ -310,6 +316,54 @@ public class Application {
 
         session.close();
 
+    }
+
+    private static void readAndUpdateBank() {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        session.getTransaction().begin();
+        Bank bank = session.get(Bank.class, 1L);
+        logger.info("readBank(): " + bank.getName());
+
+        bank.setName("New Hope Bank");
+        bank.setLastUpdatedBy("paweln");
+        bank.setLastUpdatedDate(new Date());
+
+        session.getTransaction().commit();
+
+        bank = session.load(Bank.class, 1L);
+        logger.info("readBank(): CHANGED: " + bank.getName());
+
+
+        session.close();
+    }
+
+    private static void deleteBank() {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        org.hibernate.Transaction transaction = session.beginTransaction();
+        try {
+
+            Bank bank = session.load(Bank.class, 2L);
+            logger.info("deleteBank(): " + bank.getName());
+
+            if (session.contains(bank)) {
+                session.delete(bank);
+            }
+
+            logger.info("deleteBank(): session contains: " + session.contains(bank));
+
+            session.flush();
+
+            transaction.commit();
+
+        } catch (Exception e) {
+            transaction.rollback();
+            logger.error("Exception - deleteBank()", e);
+
+        } finally {
+            session.close();
+        }
+
 
     }
+
 }
