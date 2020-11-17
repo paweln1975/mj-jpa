@@ -9,8 +9,8 @@ import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Date;
 
-public class Application {
-    private static Logger logger = LoggerFactory.getLogger(Application.class);
+public class ApplicationHibernate {
+    private static Logger logger = LoggerFactory.getLogger(ApplicationHibernate.class);
     public static void main(String[] args) {
 
         logger.info("Starting...");
@@ -57,7 +57,7 @@ public class Application {
         address.setZipCode("00000");
         address.setState("MA");
 
-        User user = createUser("Pawel", "Niedziela");
+        User user = EntitiesBuilder.createUser("Pawel", "Niedziela");
 
         user.setAddress(address);
 
@@ -97,17 +97,7 @@ public class Application {
         Session session = HibernateUtil.getSessionFactory().openSession();
         session.getTransaction().begin();
 
-        Bank bank = new Bank();
-        bank.setName("mBank");
-        bank.setAddressLine1("Bagrowa");
-        bank.setAddressLine2("82/32");
-        bank.setCity("Kraków");
-        bank.setState("MA");
-        bank.setZipCode("30725");
-        bank.setLastUpdatedBy("paweln");
-        bank.setLastUpdatedDate(new Date());
-        bank.setCreatedBy("paweln");
-        bank.setCreatedDate(new Date());
+        Bank bank = EntitiesBuilder.createBank("mBank");
 
 
         bank.getContacts().put("CASHIER", "Emilka");
@@ -120,27 +110,14 @@ public class Application {
         session.close();
 
     }
-    private static Date getMyBirthdate() {
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(1975, Calendar.MAY, 30);
-        return calendar.getTime();
-    }
+
 
     private static void operateOnCredential() {
         Session session = HibernateUtil.getSessionFactory().openSession();
         session.getTransaction().begin();
 
-        User user = new User();
-        user.setFirstName("Emilka");
-        user.setLastName("Niedziela");
-        user.setBirthDate(getMyBirthdate());
 
-        user.setEmailAddress("emilka.niedziela@gmail.com");
-
-        user.setLastUpdatedDate(new Date());
-        user.setLastUpdatedBy("pawel");
-        user.setCreateDate(new Date());
-        user.setCreatedBy("pawel");
+        User user = EntitiesBuilder.createUser("Emilka", "Niedziela");
 
         Credential credential = new Credential();
         credential.setUserName("emilka");
@@ -163,10 +140,10 @@ public class Application {
         Session session = HibernateUtil.getSessionFactory().openSession();
         session.getTransaction().begin();
 
-        Account account = createAccount("Normal");
+        Account account = EntitiesBuilder.createAccount("Normal");
 
-        account.getTransactionsList().add(createTransaction(account,10, "Shoes"));
-        account.getTransactionsList().add(createTransaction(account, 20, "Books"));
+        account.getTransactionsList().add(EntitiesBuilder.createTransaction(account,10, "Shoes"));
+        account.getTransactionsList().add(EntitiesBuilder.createTransaction(account, 20, "Books"));
         session.save(account);
 
         session.getTransaction().commit();
@@ -177,52 +154,7 @@ public class Application {
         session.close();
     }
 
-    private static User createUser(String firstName, String lastName) {
-        User user = new User();
-        user.setFirstName(firstName);
-        user.setLastName(lastName);
-        user.setBirthDate(getMyBirthdate());
 
-        user.setEmailAddress(firstName + "." + lastName + "@gmail.com");
-
-        user.setLastUpdatedDate(new Date());
-        user.setLastUpdatedBy("pawel");
-        user.setCreateDate(new Date());
-        user.setCreatedBy("pawel");
-
-        return user;
-    }
-
-    private static Account createAccount(String name) {
-        Account account = new Account();
-        account.setAccountType(name);
-        account.setCreatedBy("pawel");
-        account.setCreatedDate(new Date());
-        account.setOpenDate(new Date());
-        account.setCloseDate(new Date());
-        account.setCurrentBalance(BigDecimal.valueOf(0));
-        account.setInitialBalance(BigDecimal.valueOf(0));
-        account.setLastUpdatedDate(new Date());
-        account.setLastUpdatedBy("pawel");
-
-        return account;
-    }
-
-    private static Transaction createTransaction(Account account, long amount, String title) {
-        Transaction transaction = new Transaction();
-        transaction.setAccount(account);
-        transaction.setAMOUNT(BigDecimal.valueOf(amount));
-        transaction.setCreatedBy("pawel");
-        transaction.setCreatedDate(new Date());
-        transaction.setLastUpdatedDate(new Date());
-        transaction.setLastUpdatedBy("pawel");
-        transaction.setClosingBalance(BigDecimal.valueOf(0));
-        transaction.setInitialBalance(BigDecimal.valueOf(0));
-        transaction.setTITLE(title);
-        transaction.setTransactionType("Purchase");
-
-        return transaction;
-    }
 
     private static void operateOnBudget() {
         Session session = HibernateUtil.getSessionFactory().openSession();
@@ -233,10 +165,10 @@ public class Application {
         budget.setPERIOD("MONTH");
         budget.setGoalAmount(BigDecimal.valueOf(100));
 
-        Account account = createAccount("Budget Normal");
+        Account account = EntitiesBuilder.createAccount("Budget Normal");
 
-        budget.getTransactionList().add(createTransaction(account, 150, "Hat"));
-        budget.getTransactionList().add(createTransaction(account, 200, "Trousers"));
+        budget.getTransactionList().add(EntitiesBuilder.createTransaction(account, 150, "Hat"));
+        budget.getTransactionList().add(EntitiesBuilder.createTransaction(account, 200, "Trousers"));
 
         session.save(budget);
         session.getTransaction().commit();
@@ -247,11 +179,11 @@ public class Application {
         Session session = HibernateUtil.getSessionFactory().openSession();
         session.getTransaction().begin();
 
-        User user1 = createUser("Robot1", "Bob");
-        User user2 = createUser("Robot2", "Arisa");
+        User user1 = EntitiesBuilder.createUser("Robot1", "Bob");
+        User user2 = EntitiesBuilder.createUser("Robot2", "Arisa");
 
-        Account account1 = createAccount("UserAccount1");
-        Account account2 = createAccount("UserAccount2");
+        Account account1 = EntitiesBuilder.createAccount("UserAccount1");
+        Account account2 = EntitiesBuilder.createAccount("UserAccount2");
 
         account1.getUsers().add(user1);
         account1.getUsers().add(user2);
@@ -281,11 +213,11 @@ public class Application {
         Session session = HibernateUtil.getSessionFactory().openSession();
         session.getTransaction().begin();
 
-        User user1 = createUser("Robot1", "Bob");
-        User user2 = createUser("Robot2", "Arisa");
+        User user1 = EntitiesBuilder.createUser("Robot1", "Bob");
+        User user2 = EntitiesBuilder.createUser("Robot2", "Arisa");
 
-        Account account1 = createAccount("UserAccount1");
-        Account account2 = createAccount("UserAccount2");
+        Account account1 = EntitiesBuilder.createAccount("UserAccount1");
+        Account account2 = EntitiesBuilder.createAccount("UserAccount2");
 
         user1.getAccounts().add(account1);
         user1.getAccounts().add(account2);
