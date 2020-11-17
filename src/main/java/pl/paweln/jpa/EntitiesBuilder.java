@@ -1,9 +1,6 @@
 package pl.paweln.jpa;
 
-import pl.paweln.jpa.entities.Account;
-import pl.paweln.jpa.entities.Bank;
-import pl.paweln.jpa.entities.Transaction;
-import pl.paweln.jpa.entities.User;
+import pl.paweln.jpa.entities.*;
 
 import java.math.BigDecimal;
 import java.util.Calendar;
@@ -24,6 +21,14 @@ public class EntitiesBuilder {
         bank.setCreatedDate(new Date());
 
         return bank;
+    }
+
+    public static Currency createCurrency (String countryName, String name, String symbol) {
+        Currency currency = new Currency();
+        currency.setCountryName(countryName);
+        currency.setNAME(name);
+        currency.setSYMBOL(symbol);
+        return currency;
     }
 
     public static User createUser(String firstName, String lastName) {

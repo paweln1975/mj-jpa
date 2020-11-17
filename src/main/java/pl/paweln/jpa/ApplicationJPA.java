@@ -3,6 +3,8 @@ package pl.paweln.jpa;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import pl.paweln.jpa.entities.Bank;
+import pl.paweln.jpa.entities.Currency;
+import pl.paweln.jpa.entities.ids.CurrencyId;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
@@ -11,13 +13,39 @@ public class ApplicationJPA {
     private static final Logger logger = LoggerFactory.getLogger(ApplicationJPA.class);
     public static void main(String[] args) {
         operateOnBank();
+        operateOnCurrency();
     }
+
+    private static void operateOnCurrency() {
+        Currency dbCurrency = readCurrency("Dollar", "USA");
+        if (dbCurrency != null) {
+            deleteObject(dbCurrency);
+        }
+
+        Currency currency = EntitiesBuilder.createCurrency("USA", "Dollar", "$");
+        persistObject(currency);
+    }
+
+
+    private static Currency readCurrency (String name, String country) {
+        EntityManager entityManager = JPAUtil.getEntityManager();
+        EntityTransaction tx = entityManager.getTransaction();
+        tx.begin();
+
+        Currency currency = entityManager.find(Currency.class, new CurrencyId(name, country));
+
+        tx.commit();
+        return currency;
+
+    }
+
+
 
     private static void operateOnBank() {
         Bank bank = EntitiesBuilder.createBank("Pekao S.A.");
         persistObject(bank);
 
-        Bank dbBank1 = (Bank) readObject(Bank.class, 1L);
+        Bank dbBank1 = (Bank) readObject(Bank.class, 2L);
 
         logger.info("Bank: " + dbBank1.getName());
 
@@ -25,7 +53,7 @@ public class ApplicationJPA {
 
         Bank bank1 = (Bank)detachAttachFromPersistentContext(dbBank1);
 
-        deleteBank(bank1);
+        //deleteBank(bank1);
     }
 
     private static Object detachAttachFromPersistentContext(Object object) {
@@ -75,7 +103,7 @@ public class ApplicationJPA {
         }
     }
 
-    private static void deleteBank(Bank bank) {
+    private static void deleteObject(Object object) {
         EntityTransaction tx = null;
 
         try {
@@ -84,7 +112,7 @@ public class ApplicationJPA {
             tx = entityManager.getTransaction();
             tx.begin();
 
-            entityManager.remove(bank);
+            entityManager.remove(object);
 
             tx.commit();
 
