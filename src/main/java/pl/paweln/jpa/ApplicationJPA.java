@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import pl.paweln.jpa.entities.Bank;
 import pl.paweln.jpa.entities.Currency;
+import pl.paweln.jpa.entities.Market;
 import pl.paweln.jpa.entities.ids.CurrencyId;
 
 import javax.persistence.EntityManager;
@@ -14,6 +15,16 @@ public class ApplicationJPA {
     public static void main(String[] args) {
         operateOnBank();
         operateOnCurrency();
+        operateOnMarket();
+    }
+
+    private static void operateOnMarket() {
+        Currency currency = EntitiesBuilder.createCurrency("Poland", "Zloty", "PLN");
+        Market market = new Market();
+        market.setMarketName("Gielda Papierow Wartosciowych");
+        market.setCurrency(currency);
+
+        persistObject(market);
     }
 
     private static void operateOnCurrency() {
