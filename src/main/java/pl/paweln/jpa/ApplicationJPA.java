@@ -15,6 +15,23 @@ public class ApplicationJPA {
         operateOnCurrency();
         operateOnMarket();
         operateOnInvestments();
+        operateOnPortfolio();
+    }
+
+    private static void operateOnPortfolio() {
+        Portfolio portfolio = new Portfolio();
+        portfolio.setNAME("Portfolio for investments");
+
+        Stock stock = EntitiesBuilder.createStock("Portfolio 1 Stock", 10);
+        stock.setPortfolio(portfolio);
+        Bond bond = EntitiesBuilder.createBond("Portfolio 1 Bond", 109);
+        bond.setPortfolio(portfolio);
+
+        portfolio.getInvestments().add(stock);
+        portfolio.getInvestments().add(bond);
+
+        persistObjects(new Object[] {stock, bond});
+
     }
 
     private static void operateOnMarket() {

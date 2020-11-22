@@ -1,12 +1,24 @@
 package pl.paweln.jpa.entities;
 
-import javax.persistence.Column;
-import javax.persistence.MappedSuperclass;
+import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.Date;
 
-@MappedSuperclass
+@Entity
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public abstract class Investment {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.TABLE, generator = "table_gen")
+    @TableGenerator(name="table_gen", table = "IFINANCES_KEYS",
+            pkColumnName = "PK_NAME", valueColumnName = "PK_VALUE")
+    @Column(name = "INVESTMENT_ID")
+    protected Long investmentId;
+
+    @JoinColumn(name="PORTFOLIO_ID")
+    @ManyToOne(cascade = CascadeType.ALL)
+    private Portfolio portfolio;
+
     @Column(name = "ISSUER", nullable = false)
     protected String ISSUER;
     @Column(name = "NAME", nullable = false)
@@ -36,5 +48,21 @@ public abstract class Investment {
 
     public Date getPurchaseDate() {
         return purchaseDate;
+    }
+
+    public Long getInvestmentId() {
+        return investmentId;
+    }
+
+    public void setInvestmentId(Long investmentId) {
+        this.investmentId = investmentId;
+    }
+
+    public Portfolio getPortfolio() {
+        return portfolio;
+    }
+
+    public void setPortfolio(Portfolio portfolio) {
+        this.portfolio = portfolio;
     }
 }
