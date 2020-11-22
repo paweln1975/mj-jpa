@@ -4,9 +4,9 @@ import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import pl.paweln.jpa.entities.*;
+import pl.paweln.jpa.entities.enums.AccountType;
 
 import java.math.BigDecimal;
-import java.util.Calendar;
 import java.util.Date;
 
 public class ApplicationHibernate {
@@ -140,7 +140,7 @@ public class ApplicationHibernate {
         Session session = HibernateUtil.getSessionFactory().openSession();
         session.getTransaction().begin();
 
-        Account account = EntitiesBuilder.createAccount("Normal");
+        Account account = EntitiesBuilder.createAccount("Normal", AccountType.SAVINGS);
 
         account.getTransactionsList().add(EntitiesBuilder.createTransaction(account,10, "Shoes"));
         account.getTransactionsList().add(EntitiesBuilder.createTransaction(account, 20, "Books"));
@@ -165,7 +165,7 @@ public class ApplicationHibernate {
         budget.setPERIOD("MONTH");
         budget.setGoalAmount(BigDecimal.valueOf(100));
 
-        Account account = EntitiesBuilder.createAccount("Budget Normal");
+        Account account = EntitiesBuilder.createAccount("Budget Normal", AccountType.CHECKING);
 
         budget.getTransactionList().add(EntitiesBuilder.createTransaction(account, 150, "Hat"));
         budget.getTransactionList().add(EntitiesBuilder.createTransaction(account, 200, "Trousers"));
@@ -182,8 +182,8 @@ public class ApplicationHibernate {
         User user1 = EntitiesBuilder.createUser("Robot1", "Bob");
         User user2 = EntitiesBuilder.createUser("Robot2", "Arisa");
 
-        Account account1 = EntitiesBuilder.createAccount("UserAccount1");
-        Account account2 = EntitiesBuilder.createAccount("UserAccount2");
+        Account account1 = EntitiesBuilder.createAccount("UserAccount1", AccountType.SAVINGS);
+        Account account2 = EntitiesBuilder.createAccount("UserAccount2", AccountType.CHECKING);
 
         account1.getUsers().add(user1);
         account1.getUsers().add(user2);
@@ -216,8 +216,8 @@ public class ApplicationHibernate {
         User user1 = EntitiesBuilder.createUser("Robot1", "Bob");
         User user2 = EntitiesBuilder.createUser("Robot2", "Arisa");
 
-        Account account1 = EntitiesBuilder.createAccount("UserAccount1");
-        Account account2 = EntitiesBuilder.createAccount("UserAccount2");
+        Account account1 = EntitiesBuilder.createAccount("UserAccount1", AccountType.SAVINGS);
+        Account account2 = EntitiesBuilder.createAccount("UserAccount2", AccountType.CHECKING);
 
         user1.getAccounts().add(account1);
         user1.getAccounts().add(account2);
@@ -240,7 +240,7 @@ public class ApplicationHibernate {
         logger.info("User created: " + dbUser.getEmailAddress());
 
         for (Account account : dbUser.getAccounts()) {
-            logger.info("Account: " + account.getAccountId());
+            logger.info("Account: " + account.getAccountId() + " " + account.getNAME() + " " + account.getAccountType());
         }
 
         dbUser = session.get(User.class, user2.getUserId());
@@ -275,15 +275,17 @@ public class ApplicationHibernate {
         try {
 
             Bank bank = session.load(Bank.class, 2L);
-            logger.info("deleteBank(): " + bank.getName());
 
-            if (session.contains(bank)) {
-                session.delete(bank);
+            if (bank != null) {
+                logger.info("deleteBank(): " + bank.getName());
+
+                if (session.contains(bank)) {
+                    session.delete(bank);
+                }
+
+                logger.info("deleteBank(): session contains: " + session.contains(bank));
+                session.flush();
             }
-
-            logger.info("deleteBank(): session contains: " + session.contains(bank));
-
-            session.flush();
 
             transaction.commit();
 

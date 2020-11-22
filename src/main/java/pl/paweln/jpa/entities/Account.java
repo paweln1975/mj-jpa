@@ -1,5 +1,7 @@
 package pl.paweln.jpa.entities;
 
+import pl.paweln.jpa.entities.enums.AccountType;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.*;
@@ -22,7 +24,8 @@ public class Account {
     private Set<User> users = new HashSet<User>();
 
     @Column(name = "ACCOUNT_TYPE")
-    private String accountType;
+    @Enumerated(EnumType.STRING)
+    private AccountType accountType;
 
     @Column(name = "BANK_ID")
     private Long bankId;
@@ -62,11 +65,11 @@ public class Account {
         return accountId;
     }
 
-    public void setAccountType(String accountType) {
+    public void setAccountType(AccountType accountType) {
         this.accountType = accountType;
     }
 
-    public String getAccountType() {
+    public AccountType getAccountType() {
         return accountType;
     }
 

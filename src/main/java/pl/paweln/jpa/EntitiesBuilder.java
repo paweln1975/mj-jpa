@@ -1,6 +1,7 @@
 package pl.paweln.jpa;
 
 import pl.paweln.jpa.entities.*;
+import pl.paweln.jpa.entities.enums.AccountType;
 
 import java.math.BigDecimal;
 import java.util.Calendar;
@@ -47,9 +48,10 @@ public class EntitiesBuilder {
         return user;
     }
 
-    public static Account createAccount(String name) {
+    public static Account createAccount(String name, AccountType type) {
         Account account = new Account();
-        account.setAccountType(name);
+        account.setNAME(name);
+        account.setAccountType(type);
         account.setCreatedBy("pawel");
         account.setCreatedDate(new Date());
         account.setOpenDate(new Date());
@@ -82,5 +84,26 @@ public class EntitiesBuilder {
         Calendar calendar = Calendar.getInstance();
         calendar.set(1975, Calendar.MAY, 30);
         return calendar.getTime();
+    }
+
+    public static Bond createBond(String name, long value) {
+        Bond bond = new Bond();
+        bond.setNAME(name);
+        bond.setInterestRate(BigDecimal.valueOf(10));
+        bond.setISSUER("paweln");
+        bond.setMaturityDate(new Date());
+        bond.setPurchaseDate(new Date());
+        bond.setVALUE(BigDecimal.valueOf(value));
+        return bond;
+    }
+
+    public static Stock createStock(String name, long value) {
+        Stock stock = new Stock();
+        stock.setNAME(name);
+        stock.setPurchaseDate(new Date());
+        stock.setISSUER("paweln");
+        stock.setSharePrice(BigDecimal.valueOf(value));
+        stock.setQUANTITY(value);
+        return stock;
     }
 }

@@ -2,9 +2,7 @@ package pl.paweln.jpa;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import pl.paweln.jpa.entities.Bank;
-import pl.paweln.jpa.entities.Currency;
-import pl.paweln.jpa.entities.Market;
+import pl.paweln.jpa.entities.*;
 import pl.paweln.jpa.entities.ids.CurrencyId;
 
 import javax.persistence.EntityManager;
@@ -16,10 +14,18 @@ public class ApplicationJPA {
         operateOnBank();
         operateOnCurrency();
         operateOnMarket();
+        operateOnInvestments();
     }
 
     private static void operateOnMarket() {
-        Currency currency = EntitiesBuilder.createCurrency("Poland", "Zloty", "PLN");
+        Currency currencydb = readCurrency("Poland", "Zloty");
+        Currency currency;
+        if (currencydb != null) {
+            currency = currencydb;
+        } else {
+            currency = EntitiesBuilder.createCurrency("Poland", "Zloty", "PLN");
+        }
+
         Market market = new Market();
         market.setMarketName("Gielda Papierow Wartosciowych");
         market.setCurrency(currency);
@@ -28,7 +34,7 @@ public class ApplicationJPA {
     }
 
     private static void operateOnCurrency() {
-        Currency dbCurrency = readCurrency("Dollar", "USA");
+        Currency dbCurrency = readCurrency("USA", "Dollar");
         if (dbCurrency != null) {
             deleteObject(dbCurrency);
         }
@@ -38,12 +44,12 @@ public class ApplicationJPA {
     }
 
 
-    private static Currency readCurrency (String name, String country) {
+    private static Currency readCurrency (String countryName, String currencyName) {
         EntityManager entityManager = JPAUtil.getEntityManager();
         EntityTransaction tx = entityManager.getTransaction();
         tx.begin();
 
-        Currency currency = entityManager.find(Currency.class, new CurrencyId(name, country));
+        Currency currency = entityManager.find(Currency.class, new CurrencyId(currencyName, countryName));
 
         tx.commit();
         return currency;
@@ -56,7 +62,7 @@ public class ApplicationJPA {
         Bank bank = EntitiesBuilder.createBank("Pekao S.A.");
         persistObject(bank);
 
-        Bank dbBank1 = (Bank) readObject(Bank.class, 2L);
+        Bank dbBank1 = (Bank) readObject(Bank.class, bank.getBankId());
 
         logger.info("Bank: " + dbBank1.getName());
 
@@ -65,6 +71,13 @@ public class ApplicationJPA {
         Bank bank1 = (Bank)detachAttachFromPersistentContext(dbBank1);
 
         //deleteBank(bank1);
+    }
+
+    private static void operateOnInvestments() {
+        Stock stock = EntitiesBuilder.createStock("Stock 1", 10);
+        Bond bond = EntitiesBuilder.createBond("Bond 1", 20);
+
+        persistObjects(new Object[] {stock, bond});
     }
 
     private static Object detachAttachFromPersistentContext(Object object) {
