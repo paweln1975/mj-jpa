@@ -164,7 +164,7 @@ public class ApplicationJPA {
         }
     }
 
-
+    @SuppressWarnings({"unchecked", "rawtypes"})
     private static Object readObject (Class aClass, long Id) {
         EntityTransaction tx = null;
         Object object = null;

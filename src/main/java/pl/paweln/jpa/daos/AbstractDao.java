@@ -1,8 +1,5 @@
 package pl.paweln.jpa.daos;
 
-import pl.paweln.jpa.entities.Transaction;
-import pl.paweln.jpa.entities.User;
-
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.TypedQuery;
@@ -13,7 +10,7 @@ import java.util.function.Consumer;
 
 public abstract class AbstractDao<T> implements Dao<T> {
     private EntityManager entityManager;
-    private Class<T> persistentClass;
+    private final Class<T> persistentClass;
 
     @SuppressWarnings("unchecked")
     public AbstractDao() {

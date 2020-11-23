@@ -3,6 +3,7 @@ package pl.paweln.jpa.entities;
 import javax.persistence.*;
 import java.util.Date;
 
+@SuppressWarnings({"FieldMayBeFinal", "CanBeFinal"})
 @Entity
 @Table(name="TIME_TEST")
 @Access(value= AccessType.FIELD)

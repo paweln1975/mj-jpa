@@ -16,12 +16,12 @@ public class Account {
     private Long accountId;
 
     @OneToMany(cascade=CascadeType.ALL, mappedBy="account")
-    private List<Transaction> transactionsList = new ArrayList<Transaction>();
+    private List<Transaction> transactionsList = new ArrayList<>();
 
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name="USER_ACCOUNT", joinColumns = @JoinColumn(name = "ACCOUNT_ID"),
         inverseJoinColumns = @JoinColumn(name="USER_ID"))
-    private Set<User> users = new HashSet<User>();
+    private Set<User> users = new HashSet<>();
 
     @Column(name = "ACCOUNT_TYPE")
     @Enumerated(EnumType.STRING)

@@ -8,13 +8,12 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
 public class JPAUtil {
-    private static Logger logger = LoggerFactory.getLogger(JPAUtil.class);
+    private static final Logger logger = LoggerFactory.getLogger(JPAUtil.class);
 
-    private static EntityManagerFactory entityManagerFactory = null;
     private static final EntityManager entityManager = createEntityManager();
 
     private static EntityManager createEntityManager() {
-        entityManagerFactory = Persistence.createEntityManagerFactory("infinite-finances");
+        EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("infinite-finances");
         return entityManagerFactory.createEntityManager();
     }
 

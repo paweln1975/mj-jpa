@@ -20,7 +20,7 @@ public class Budget {
     @OneToMany(cascade = CascadeType.ALL)
     @JoinTable(name="BUDGET_TRANSACTION", joinColumns = @JoinColumn(name="BUDGET_ID"),
         inverseJoinColumns = @JoinColumn(name = "TRANSACTION_ID"))
-    private List<Transaction> transactionList = new ArrayList<Transaction>();
+    private List<Transaction> transactionList = new ArrayList<>();
 
     @Column(name = "GOAL_AMOUNT", nullable = false)
     private BigDecimal goalAmount;

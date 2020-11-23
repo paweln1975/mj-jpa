@@ -1,7 +1,5 @@
 package pl.paweln.jpa.entities.ids;
 
-import pl.paweln.jpa.entities.Currency;
-
 import java.io.Serializable;
 
 public class CurrencyId implements Serializable  {
@@ -23,4 +21,13 @@ public class CurrencyId implements Serializable  {
     public void setCountryName(String countryName) {
         this.countryName = countryName;
     }
+
+    public String getNAME() {
+        return NAME;
+    }
+
+    public void setNAME(String NAME) {
+        this.NAME = NAME;
+    }
+
 }

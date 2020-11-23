@@ -1,7 +1,6 @@
 package pl.paweln.jpa.entities;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
 import java.util.Date;
 
 @Entity

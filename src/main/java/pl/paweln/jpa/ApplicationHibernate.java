@@ -10,7 +10,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 public class ApplicationHibernate {
-    private static Logger logger = LoggerFactory.getLogger(ApplicationHibernate.class);
+    private static final Logger logger = LoggerFactory.getLogger(ApplicationHibernate.class);
     public static void main(String[] args) {
 
         logger.info("Starting...");

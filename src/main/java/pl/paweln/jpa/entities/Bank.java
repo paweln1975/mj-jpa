@@ -18,6 +18,7 @@ public class Bank {
     @Column(name="IS_INTERNATIONAL")
     private boolean isInternational;
 
+    @SuppressWarnings({"FieldMayBeFinal", "CanBeFinal"})
     @Embedded // Composite Value Type
     private Address address = new Address();
 
@@ -44,7 +45,7 @@ public class Bank {
     @CollectionTable(name="BANK_CONTACT", joinColumns=@JoinColumn(name="BANK_ID"))
     @MapKeyColumn(name="POSITION_TYPE")
     @Column(name="NAME")
-    Map<String, String> contacts = new HashMap<String, String>();
+    Map<String, String> contacts = new HashMap<>();
 
     public Long getBankId() {
         return bankId;

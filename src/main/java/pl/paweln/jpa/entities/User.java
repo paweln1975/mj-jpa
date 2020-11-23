@@ -62,12 +62,12 @@ public class User {
     @CollectionTable(name="USER_ADDRESS", joinColumns=@JoinColumn(name="USER_ID"))
     @AttributeOverrides({@AttributeOverride(name="addressLine1", column=@Column(name="USER_ADDRESS_LINE_1")),
             @AttributeOverride(name="addressLine2", column=@Column(name="USER_ADDRESS_LINE_2"))})
-    private List<Address> addressList = new ArrayList<Address>();
+    private List<Address> addressList = new ArrayList<>();
 
     @ManyToMany(cascade = CascadeType.ALL, mappedBy = "users")
     //@JoinTable(name="USER_ACCOUNT", joinColumns = @JoinColumn(name = "USER_ID"),
     //        inverseJoinColumns = @JoinColumn(name="ACCOUNT_ID"))
-    private Set<Account> accounts = new HashSet<Account>();
+    private Set<Account> accounts = new HashSet<>();
 
     public int getAge() {
         return age;
