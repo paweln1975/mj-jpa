@@ -1,12 +1,18 @@
 package pl.paweln.jpa;
 
+import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
+import org.hibernate.query.criteria.HibernateCriteriaBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import pl.paweln.jpa.entities.Account;
 import pl.paweln.jpa.entities.Transaction;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Order;
+import javax.persistence.criteria.Root;
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -16,9 +22,11 @@ public class ApplicationHql {
     public static void main(String[] args) {
         readTransactions();
         readDeposits();
+
     }
 
     private static void readTransactions() {
+        logger.info("Reading transactions ...");
 
         Session session = HibernateUtil.getSessionFactory().openSession();
         session.getTransaction().begin();
@@ -34,6 +42,7 @@ public class ApplicationHql {
 
     @SuppressWarnings("unchecked")
     private static void readDeposits() {
+        logger.info("Reading deposits ...");
 
         Session session = HibernateUtil.getSessionFactory().openSession();
         session.getTransaction().begin();
@@ -50,4 +59,6 @@ public class ApplicationHql {
         }
         session.getTransaction().commit();
     }
+
+
 }

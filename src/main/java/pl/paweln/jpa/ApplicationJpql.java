@@ -7,6 +7,9 @@ import pl.paweln.jpa.entities.Transaction;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.util.List;
 
 public class ApplicationJpql {
@@ -15,6 +18,9 @@ public class ApplicationJpql {
     public static void main(String[] args) {
         readTransactions();
         readAccountsWithJoin();
+        readTransactionsWithCriteriaAPI();
+        readTransactionsWithCriteriaAPIShort();
+        readTransactionsWithCriteriaAPIPaging();
     }
 
     private static void readTransactions() {
@@ -47,5 +53,74 @@ public class ApplicationJpql {
             logger.info("Account: " + accountData[0] + " " + accountData[1]);
         }
 
+    }
+
+    private static void readTransactionsWithCriteriaAPI() {
+        logger.info("Reading transactions ...");
+
+        EntityManager entityManager = JPAUtil.getEntityManager();
+
+        CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Transaction> criteriaQuery = builder.createQuery(Transaction.class);
+
+        Root<Transaction> root = criteriaQuery.from(Transaction.class);
+        criteriaQuery.select(root);
+
+        criteriaQuery.orderBy(builder.asc(root.get("TITLE")));
+
+        TypedQuery<Transaction> query = entityManager.createQuery(criteriaQuery);
+
+        List<Transaction> transactionList = query.getResultList();
+
+        for (Transaction transaction : transactionList) {
+            logger.info(transaction.getTITLE());
+        }
+
+    }
+
+    private static void readTransactionsWithCriteriaAPIShort() {
+        logger.info("Reading transactions > 250 and <= 1000 short ...");
+
+        EntityManager entityManager = JPAUtil.getEntityManager();
+
+        CriteriaBuilder b = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Transaction> cr = b.createQuery(Transaction.class);
+        Root<Transaction> root = cr.from(Transaction.class);
+
+        TypedQuery<Transaction> query = entityManager.createQuery(cr
+                .select(root)
+                .where(b.and(b.gt(root.get("AMOUNT"), 250), b.le(root.get("AMOUNT"), 1000)))
+                .orderBy(b.asc(root.get("TITLE"))));
+
+        List<Transaction> transactionList = query.getResultList();
+
+        for (Transaction transaction : transactionList) {
+            logger.info(transaction.getTITLE());
+        }
+    }
+
+    private static void readTransactionsWithCriteriaAPIPaging() {
+        logger.info("Reading transactions with paging ...");
+
+        int pageNumber = 3;
+        int pageSize = 4;
+
+        EntityManager entityManager = JPAUtil.getEntityManager();
+
+        CriteriaBuilder b = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Transaction> cr = b.createQuery(Transaction.class);
+        Root<Transaction> root = cr.from(Transaction.class);
+
+        TypedQuery<Transaction> query = entityManager.createQuery(cr
+                .select(root));
+
+        query.setFirstResult((pageNumber-1) * pageSize);
+        query.setMaxResults(pageSize);
+
+        List<Transaction> transactionList = query.getResultList();
+
+        for (Transaction transaction : transactionList) {
+            logger.info(transaction.getTITLE());
+        }
     }
 }
