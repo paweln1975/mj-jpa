@@ -2,7 +2,6 @@ package pl.paweln.jpa;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import pl.paweln.jpa.entities.Account;
 import pl.paweln.jpa.entities.Transaction;
 
 import javax.persistence.EntityManager;
@@ -31,6 +30,7 @@ public class ApplicationJpql {
 
     }
 
+    @SuppressWarnings("unchecked")
     private static void readAccountsWithJoin() {
 
         EntityManager entityManager = JPAUtil.getEntityManager();

@@ -8,6 +8,10 @@ import java.util.*;
 
 @Entity
 @Table(name = "account")
+@NamedQueries(
+        @NamedQuery(name = "Account.largeDeposit", query = "select distinct t.account from Transaction t" +
+                " where t.AMOUNT > :amount and t.transactionType = 'Deposit'")
+)
 public class Account {
 
     @Id
@@ -27,8 +31,9 @@ public class Account {
     @Enumerated(EnumType.STRING)
     private AccountType accountType;
 
-    @Column(name = "BANK_ID")
-    private Long bankId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "BANK_ID")
+    private Bank bank;
 
     @Column(name = "CLOSE_DATE", nullable = false)
     private Date closeDate;
@@ -73,12 +78,12 @@ public class Account {
         return accountType;
     }
 
-    public void setBankId(Long bankId) {
-        this.bankId = bankId;
+    public void setBankId(Bank bank) {
+        this.bank = bank;
     }
 
-    public Long getBankId() {
-        return bankId;
+    public Bank getBank() {
+        return bank;
     }
 
     public void setCloseDate(Date closeDate) {
@@ -174,7 +179,6 @@ public class Account {
         return "Account{" +
                 "accountId=" + accountId + '\'' +
                 "accountType=" + accountType + '\'' +
-                "bankId=" + bankId + '\'' +
                 "closeDate=" + closeDate + '\'' +
                 "createdBy=" + createdBy + '\'' +
                 "createdDate=" + createdDate + '\'' +

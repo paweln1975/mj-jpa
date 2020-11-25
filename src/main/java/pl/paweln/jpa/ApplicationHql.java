@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import pl.paweln.jpa.entities.Account;
 import pl.paweln.jpa.entities.Transaction;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public class ApplicationHql {
@@ -31,19 +32,21 @@ public class ApplicationHql {
         session.getTransaction().commit();
     }
 
-
+    @SuppressWarnings("unchecked")
     private static void readDeposits() {
 
         Session session = HibernateUtil.getSessionFactory().openSession();
         session.getTransaction().begin();
 
-        Query<Account> query = session.createQuery(
-                "select distinct t.account from Transaction t" +
-                        " where t.AMOUNT > 500 and t.transactionType = 'Deposit'", Account.class);
-        List<Account> accountList = query.list();
+        //Query<Account> query = session.createQuery(
+        //        "", Account.class);
+        Query<Account> query = session.getNamedQuery("Account.largeDeposit");
+        query.setParameter("amount", BigDecimal.valueOf(500));
 
+        List<Account> accountList = query.list();
+        logger.info("After query execution.");
         for (Account account : accountList) {
-            logger.info("Account: " + account.getNAME());
+            logger.info("Account: " + account.getNAME() + " Bank:" + account.getBank().getName());
         }
         session.getTransaction().commit();
     }
